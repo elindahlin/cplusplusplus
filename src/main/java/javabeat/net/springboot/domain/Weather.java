@@ -5,6 +5,7 @@ public class Weather {
 	private String dateTime;
 	private double temperature;
 	private WeatherType weatherType;
+	private PrecipitationType precipitationType;
 
 	public Weather() {
 	}
@@ -33,12 +34,21 @@ public class Weather {
 		this.weatherType = weatherType;
 	}
 	
+	public PrecipitationType getPrecipitationType() {
+		return precipitationType;
+	}
+
+	public void setPrecipitationType(PrecipitationType precipitationType) {
+		this.precipitationType = precipitationType;
+	}
+
 	@Override
 	public String toString() {
 		return "Weather{" + 
 				"dateTime=" + dateTime + 
 				", temperature=" + temperature + 
 				", weatherType=" + weatherType +
+				", precipitationType=" + precipitationType + 
 				"}";
 	}
 }

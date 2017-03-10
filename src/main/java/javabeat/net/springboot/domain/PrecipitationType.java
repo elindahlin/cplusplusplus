@@ -13,4 +13,14 @@ public enum PrecipitationType {
 	public int getValue() {
 		return value;
 	}
+	
+	public static PrecipitationType getPrecipitationType(int val) {
+		PrecipitationType[] precipitationTypes = PrecipitationType.values();
+		for (int i = 0; i < precipitationTypes.length; i++) {
+			if (precipitationTypes[i].value == val) {
+				return precipitationTypes[i];
+			}
+		}
+		return null;
+	}
 }

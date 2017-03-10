@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Geometry {
 
 	private String type;
-//	private Coordinates coordinates;
+	private double[][] coordinates;
 	
 	public Geometry() {
 	}
@@ -19,19 +19,19 @@ public class Geometry {
 		this.type = type;
 	}
 	
-//	public Coordinates getCoordinates() {
-//		return coordinates;
-//	}
-//	
-//	public void setCoordinates(Coordinates coordinates) {
-//		this.coordinates = coordinates;
-//	}
+	public double[][] getCoordinates() {
+		return coordinates;
+	}
+	
+	public void setCoordinates(double[][] coordinates) {
+		this.coordinates = coordinates;
+	}
 	
 	@Override
 	public String toString() {
 		return "Geometry{" +
 				"type=" + type +
-//				"coordinates=" + coordinates +
-				"]";
+				"coordinates=" + coordinates +
+				"}";
 	}
 }
