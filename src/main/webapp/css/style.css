@@ -1,0 +1,88 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    background:  url(http://i.giphy.com/128ydcHOsrk5GM.gif) no-repeat center center fixed; 
+  	background-size: cover;
+}
+/* REGN: http://i35.photobucket.com/albums/d183/KnightMare21/rain-1.gif */
+/* SOL: http://giphy.com/gifs/sun-sunshine-vadsqiBwAM18c */
+
+p {
+	font-size: 1em;
+	color: white;
+	font-weight: 200;
+}
+
+#content {
+	/*background-color: black;*/
+	height:100vh;
+	width: 100%;
+}
+
+.centered {
+	text-align: center;
+}
+
+.circle {
+	border-radius: 50%;
+	background-color:rgba(255,255,255,0.5);
+	text-align: center;
+	height:100vw;
+}
+
+
+
+#location {
+	font-size: 2em;
+	font-weight: 200;
+}
+
+#temperature {
+	font-size: 1em;
+	font-weight: 300;
+}
+
+.date-button {
+	padding: 3% 3%;
+	border: 4px solid gainsboro;
+	margin-top: 5%;
+	color: white;
+	text-align: center;
+	font-size: 0.65em;
+	border-radius: 10px;
+}
+
+#locationSection {
+	background-color: black;
+	color: #ff1d8e;
+}
+
+#activityTypeSection {
+	background-color: black;
+}
+
+#detailsSection{
+	background-color: black;
+	color:#ff1d8e;
+}
+
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.textbox {
+	width:100%;
+	height:100px;
+	background-color: transparent;
+	border:none;
+	border-bottom: 2px solid #ff1d8e;
+	font-size: 2em;
+	font-weight: 200;
+}
+
+.activity {
+	border: 2px solid #ff1d8e;
+	height: 20vw;
+	margin-top: 10%;
+}
