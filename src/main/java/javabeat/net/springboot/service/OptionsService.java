@@ -7,5 +7,5 @@ import javabeat.net.springboot.domain.Option;
 
 public interface OptionsService {
 
-	Collection<Option> getOptions(ActivityCategory category, double lat, double lon);
+	Collection<Option> getOptions(ActivityCategory category, double lat, double lon, double radius);
 }

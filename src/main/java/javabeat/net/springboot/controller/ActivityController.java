@@ -67,7 +67,7 @@ public class ActivityController {
 			@RequestParam(value = "maxPersons", required = true) int maxPersons,
 			@RequestParam(value = "latitude", required = true) double latitude,
 			@RequestParam(value = "longitude", required = true) double longitude,
-			@RequestParam(value = "training", required = false) boolean training,
+			@RequestParam(value = "active", required = false) boolean active,
 			@RequestParam(value = "social", required = false) boolean social,
 			@RequestParam(value = "relaxed", required = false) boolean relaxed,
 			@RequestParam(value = "family", required = false) boolean family,
@@ -91,7 +91,7 @@ public class ActivityController {
 		
 
 		ActivityCategory category = ActivityCategory.valueOf(activityCategory.toUpperCase());
-		Map<ActivityType, Boolean> suitableActivityTypes = putActivitiesInMap(training, social, relaxed, 
+		Map<ActivityType, Boolean> suitableActivityTypes = putActivitiesInMap(active, social, relaxed, 
 				family, cultural, date);
 		Map<WeatherType, Boolean> suitableWeatherTypes = putWeathersInMap(clearSky, nearlyClearSky,
 				variableCloudiness, halfClearSky, cloudySky, overcast, fog, rainShowers, thunderstorm,
@@ -125,10 +125,10 @@ public class ActivityController {
 		return weatherTypes;
 	}
 
-	private Map<ActivityType, Boolean> putActivitiesInMap(boolean training, boolean social, boolean relaxed,
+	private Map<ActivityType, Boolean> putActivitiesInMap(boolean active, boolean social, boolean relaxed,
 			boolean family, boolean cultural, boolean date) {
 		Map<ActivityType, Boolean> activityTypes = new HashMap<>();
-		activityTypes.put(ActivityType.TRAINING, training);
+		activityTypes.put(ActivityType.ACTIVE, active);
 		activityTypes.put(ActivityType.SOCIAL, social);
 		activityTypes.put(ActivityType.RELAXED, relaxed);
 		activityTypes.put(ActivityType.FAMILY, family);

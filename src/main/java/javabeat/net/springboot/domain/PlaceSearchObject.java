@@ -1,6 +1,9 @@
 package javabeat.net.springboot.domain;
 
-public class Option {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class PlaceSearchObject {
 
 	private GoogleGeometry geometry;
 	private String icon;
@@ -9,7 +12,7 @@ public class Option {
 	private String[] types;
 	private String vicinity;
 	
-	public Option() {
+	public PlaceSearchObject() {
 	}
 
 	public GoogleGeometry getGeometry() {
