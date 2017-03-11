@@ -66,10 +66,10 @@ public class ActivityController {
 			@RequestParam(value = "longitude", required = true) double longitude,
 			@RequestParam(value = "training", required = false) boolean training,
 			@RequestParam(value = "social", required = false) boolean social,
-			@RequestParam(value = "sitting", required = false) boolean sitting,
+			@RequestParam(value = "relaxed", required = false) boolean relaxed,
 			@RequestParam(value = "family", required = false) boolean family,
 			@RequestParam(value = "cultural", required = false) boolean cultural,
-			@RequestParam(value = "park", required = false) boolean park,
+			@RequestParam(value = "date", required = false) boolean date,
 			@RequestParam(value = "clearSky", required = false) boolean clearSky,
 			@RequestParam(value = "nearlyClearSky", required = false) boolean nearlyClearSky,
 			@RequestParam(value = "variableCloudiness", required = false) boolean variableCloudiness,
@@ -86,8 +86,8 @@ public class ActivityController {
 			@RequestParam(value = "sleet", required = false) boolean sleet,
 			@RequestParam(value = "snowfall", required = false) boolean snowfall) {
 		
-		Map<ActivityType, Boolean> suitableActivityTypes = putActivitiesInMap(training, social, sitting, 
-				family, cultural, park);
+		Map<ActivityType, Boolean> suitableActivityTypes = putActivitiesInMap(training, social, relaxed, 
+				family, cultural, date);
 		Map<WeatherType, Boolean> suitableWeatherTypes = putWeathersInMap(clearSky, nearlyClearSky,
 				variableCloudiness, halfClearSky, cloudySky, overcast, fog, rainShowers, thunderstorm,
 				lightSleet, snowShowers, rain, thunder, sleet, snowfall);
@@ -120,15 +120,15 @@ public class ActivityController {
 		return weatherTypes;
 	}
 
-	private Map<ActivityType, Boolean> putActivitiesInMap(boolean training, boolean social, boolean sitting,
-			boolean family, boolean cultural, boolean park) {
+	private Map<ActivityType, Boolean> putActivitiesInMap(boolean training, boolean social, boolean relaxed,
+			boolean family, boolean cultural, boolean date) {
 		Map<ActivityType, Boolean> activityTypes = new HashMap<>();
 		activityTypes.put(ActivityType.TRAINING, training);
 		activityTypes.put(ActivityType.SOCIAL, social);
-		activityTypes.put(ActivityType.SITTING, sitting);
+		activityTypes.put(ActivityType.RELAXED, relaxed);
 		activityTypes.put(ActivityType.FAMILY, family);
 		activityTypes.put(ActivityType.CULTURAL, cultural);
-		activityTypes.put(ActivityType.PARK, park);
+		activityTypes.put(ActivityType.DATE, date);
 		return activityTypes;
 	}
 

@@ -2,7 +2,6 @@ package javabeat.net.springboot.service;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,12 +41,13 @@ public class ActivityServiceImpl implements ActivityService {
 		List<Activity> activities = activityRepository.findAll();
 		
 		activities = activities.stream()
-			.filter(actType -> actType.isSuitableFor(activityType))
-			.filter(actWeather -> actWeather.isSuitableFor(weather.getWeatherType()))
-			.filter(actPrice -> actPrice.getPrice() <= pricePerPerson)
-			.filter(actPersMax -> actPersMax.getMaxPersons() >= nbrOfPersons)
-			.filter(actPersMin -> actPersMin.getMinPersons() <= nbrOfPersons)
-			.filter(actPos -> actPos.isCloseTo(lat, lon, rangeKm))
+			.filter(activity -> 
+					activity.isSuitableFor(activityType) && 
+					activity.isSuitableFor(weather.getWeatherType()) &&
+					activity.getPrice() <= pricePerPerson &&
+					activity.getMaxPersons() >= nbrOfPersons && 
+					activity.getMinPersons() <= nbrOfPersons &&
+					activity.isCloseTo(lat, lon, rangeKm))
 			.collect(Collectors.toList());
 		
 		return activities;
