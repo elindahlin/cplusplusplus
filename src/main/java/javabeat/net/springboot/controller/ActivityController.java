@@ -33,7 +33,6 @@ public class ActivityController {
 		this.activityService = activityService;
 	}
 	
-//	@CrossOrigin
 	@RequestMapping(value = "/activity", method = RequestMethod.GET)
     public Collection<Activity> getActivitySuggestions(
     		@RequestParam(value = "lat", required = true) double lat,
