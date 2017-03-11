@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javabeat.net.springboot.domain.Activity;
+import javabeat.net.springboot.domain.ActivityCategory;
 import javabeat.net.springboot.domain.ActivityType;
 import javabeat.net.springboot.domain.WeatherType;
 import javabeat.net.springboot.service.ActivityService;
@@ -32,6 +33,7 @@ public class ActivityController {
 		this.activityService = activityService;
 	}
 	
+//	@CrossOrigin
 	@RequestMapping(value = "/activity", method = RequestMethod.GET)
     public Collection<Activity> getActivitySuggestions(
     		@RequestParam(value = "lat", required = true) double lat,
@@ -60,6 +62,7 @@ public class ActivityController {
 			@RequestParam(value = "description", required = true) String description,
 			@RequestParam(value = "url", required = true) String url,
 			@RequestParam(value = "price", required = true) int price,
+			@RequestParam(value = "activityCategory", required = true) String activityCategory,
 			@RequestParam(value = "minPersons", required = true) int minPersons,
 			@RequestParam(value = "maxPersons", required = true) int maxPersons,
 			@RequestParam(value = "latitude", required = true) double latitude,
@@ -86,14 +89,16 @@ public class ActivityController {
 			@RequestParam(value = "sleet", required = false) boolean sleet,
 			@RequestParam(value = "snowfall", required = false) boolean snowfall) {
 		
+
+		ActivityCategory category = ActivityCategory.valueOf(activityCategory.toUpperCase());
 		Map<ActivityType, Boolean> suitableActivityTypes = putActivitiesInMap(training, social, relaxed, 
 				family, cultural, date);
 		Map<WeatherType, Boolean> suitableWeatherTypes = putWeathersInMap(clearSky, nearlyClearSky,
 				variableCloudiness, halfClearSky, cloudySky, overcast, fog, rainShowers, thunderstorm,
 				lightSleet, snowShowers, rain, thunder, sleet, snowfall);
 		
-		Activity activity = new Activity(name, description, url, price, minPersons, maxPersons, latitude,
-				longitude, suitableActivityTypes, suitableWeatherTypes);
+		Activity activity = new Activity(name, description, url, category, price, minPersons, maxPersons, 
+				latitude, longitude, suitableActivityTypes, suitableWeatherTypes);
 		return activityService.save(activity);
 	}
 	

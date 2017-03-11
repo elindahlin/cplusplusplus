@@ -21,6 +21,7 @@ public class Activity {
 	private String name;
 	private String description;
 	private String url;
+	private ActivityCategory activityCategory;
 	private int price;
 	private int minPersons;
 	private int maxPersons;
@@ -40,12 +41,14 @@ public class Activity {
 	public Activity() {
 	}
 	
-	public Activity(String name, String description, String url, int price, int minPersons, int maxPersons, 
-			double latitude, double longitude, Map<ActivityType, Boolean> suitableActivityTypes, 
+	public Activity(String name, String description, String url, ActivityCategory activityCategory, 
+			int price, int minPersons, int maxPersons, double latitude, double longitude, 
+			Map<ActivityType, Boolean> suitableActivityTypes, 
 			Map<WeatherType, Boolean> suitableWeatherTypes) {
 		this.name = name;
 		this.description = description;
 		this.url = url;
+		this.activityCategory = activityCategory;
 		this.price = price;
 		this.minPersons = minPersons;
 		this.maxPersons = maxPersons;
@@ -146,6 +149,14 @@ public class Activity {
 
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+
+	public ActivityCategory getActivityCategory() {
+		return activityCategory;
+	}
+
+	public void setActivityCategory(ActivityCategory activityCategory) {
+		this.activityCategory = activityCategory;
 	}
 	
 	@Override
