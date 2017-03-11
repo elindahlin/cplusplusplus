@@ -2,7 +2,7 @@ package javabeat.net.springboot.domain;
 
 public class Weather {
 	
-	private String dateTime;
+	private String date;
 	private double temperature;
 	private WeatherType weatherType;
 	private PrecipitationType precipitationType;
@@ -10,12 +10,12 @@ public class Weather {
 	public Weather() {
 	}
 
-	public String getDateTime() {
-		return dateTime;
+	public String getDate() {
+		return date;
 	}
 
-	public void setDateTime(String dateTime) {
-		this.dateTime = dateTime;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	public double getTemperature() {
@@ -45,7 +45,7 @@ public class Weather {
 	@Override
 	public String toString() {
 		return "Weather{" + 
-				"dateTime=" + dateTime + 
+				"date=" + date + 
 				", temperature=" + temperature + 
 				", weatherType=" + weatherType +
 				", precipitationType=" + precipitationType + 
