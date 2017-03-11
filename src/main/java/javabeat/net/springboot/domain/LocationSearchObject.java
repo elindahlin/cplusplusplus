@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class LocationSearchObject {
 
 	private GoogleGeometry geometry;
+	private AddressComponent[] address_components;
 	
 	public LocationSearchObject() {
 	}
@@ -16,5 +17,13 @@ public class LocationSearchObject {
 	
 	public void setGeometry(GoogleGeometry geometry) {
 		this.geometry = geometry;
+	}
+
+	public AddressComponent[] getAddress_components() {
+		return address_components;
+	}
+
+	public void setAddress_components(AddressComponent[] address_components) {
+		this.address_components = address_components;
 	}
 }

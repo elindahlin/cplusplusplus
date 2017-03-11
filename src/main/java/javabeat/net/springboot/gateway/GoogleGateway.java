@@ -12,4 +12,6 @@ public interface GoogleGateway {
 	Collection<Option> findOptionsByText(String text, double lat, double lon, double radius);
 	
 	Location getLocation(String locationString);
+	
+	String getLocationName(double lat, double lon);
 }

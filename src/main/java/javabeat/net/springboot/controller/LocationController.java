@@ -21,7 +21,13 @@ public class LocationController {
 	}
 
 	@RequestMapping(value = "/location", method = RequestMethod.GET)
-	public Location addActivity(@RequestParam(value = "place", required = true) String place) {
+	public Location findLocation(@RequestParam(value = "place", required = true) String place) {
 		return locationService.getLocation(place);
+	}
+	
+	@RequestMapping(value = "/locationName", method = RequestMethod.GET)
+	public String findName(@RequestParam(value = "lat", required = true) double lat,
+							 @RequestParam(value = "lon", required = true) double lon) {
+		return locationService.getLocation(lat, lon);
 	}
 }

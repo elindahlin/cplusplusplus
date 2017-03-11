@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestTemplate;
 
+import javabeat.net.springboot.domain.AddressComponent;
 import javabeat.net.springboot.domain.Location;
 import javabeat.net.springboot.domain.LocationSearchResult;
 import javabeat.net.springboot.domain.Option;
@@ -73,6 +74,10 @@ public class GoogleGatewayImpl implements GoogleGateway {
 	private String getLocationUrl(String locationString) {
 		return LOCATION_URL + "address=" + locationString;
 	}
+	
+	private String getLocationNameUrl(double lat, double lon) {
+		return LOCATION_URL + "latlng=" + lat + "," + lon;
+	}
 
 	@Override
 	public Location getLocation(String locationString) {
@@ -82,5 +87,25 @@ public class GoogleGatewayImpl implements GoogleGateway {
 		LocationSearchResult searchResult = restTemplate.getForObject(url, LocationSearchResult.class);		
 		return searchResult.getStatus().equals("OK") ? 
 				searchResult.getResults()[0].getGeometry().getLocation() : null;
+	}
+
+	@Override
+	public String getLocationName(double lat, double lon) {
+		RestTemplate restTemplate = new RestTemplate();
+		String url = getLocationNameUrl(lat, lon);
+		LOGGER.info("Getting location by string from url: " + url);
+		LocationSearchResult searchResult = restTemplate.getForObject(url, LocationSearchResult.class);		
+		return searchResult.getStatus().equals("OK") ? getCityName(searchResult) : null;
+	}
+
+	private String getCityName(LocationSearchResult searchResult) {
+		AddressComponent[] addressComponents = searchResult.getResults()[0].getAddress_components();
+		for (int i = 0; i < addressComponents.length; i++) {
+			AddressComponent component = addressComponents[i];
+			if (Arrays.asList(component.getTypes()).contains("postal_town")) {
+				return component.getShort_name();
+			}
+		}
+		return null;
 	}
 }

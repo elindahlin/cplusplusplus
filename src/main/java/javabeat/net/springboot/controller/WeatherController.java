@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javabeat.net.springboot.domain.Weather;
+import javabeat.net.springboot.domain.WeatherType;
 import javabeat.net.springboot.service.WeatherService;
 
 @RestController
@@ -27,4 +28,9 @@ public class WeatherController {
         Weather weather = weatherService.getWeather(lat, lon);
         return weather;
     }
+	
+	@RequestMapping(value = "/weatherType", method = RequestMethod.GET)
+	public @ResponseBody WeatherType[] getWeatherTypes() {
+		return WeatherType.values();
+	}
 }

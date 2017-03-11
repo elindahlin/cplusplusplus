@@ -27,4 +27,8 @@ public class LocationServiceImpl implements LocationService {
 		return googleGateway.getLocation(locationString);
 	}
 
+	@Override
+	public String getLocation(double lat, double lon) {
+		return googleGateway.getLocationName(lat, lon);
+	}
 }
