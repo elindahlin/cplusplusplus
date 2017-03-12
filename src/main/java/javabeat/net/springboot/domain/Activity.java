@@ -20,13 +20,10 @@ public class Activity {
 	private Integer id;
 	private String name;
 	private String description;
-	private String url;
 	private ActivityCategory activityCategory;
 	private int price;
 	private int minPersons;
 	private int maxPersons;
-	private double latitude;
-	private double longitude;
 	@ElementCollection
     @MapKeyColumn(name="activityType")
     @Column(name="isSuitable")
@@ -41,19 +38,15 @@ public class Activity {
 	public Activity() {
 	}
 	
-	public Activity(String name, String description, String url, ActivityCategory activityCategory, 
-			int price, int minPersons, int maxPersons, double latitude, double longitude, 
-			Map<ActivityType, Boolean> suitableActivityTypes, 
+	public Activity(String name, String description, ActivityCategory activityCategory, int price, 
+			int minPersons, int maxPersons,	Map<ActivityType, Boolean> suitableActivityTypes, 
 			Map<WeatherType, Boolean> suitableWeatherTypes) {
 		this.name = name;
 		this.description = description;
-		this.url = url;
 		this.activityCategory = activityCategory;
 		this.price = price;
 		this.minPersons = minPersons;
 		this.maxPersons = maxPersons;
-		this.latitude = latitude;
-		this.longitude = longitude;
 		this.suitableActivityTypes = suitableActivityTypes;
 		this.suitableWeatherTypes = suitableWeatherTypes;
 	}
@@ -111,14 +104,6 @@ public class Activity {
 		this.description = description;
 	}
 
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
 	public int getMinPersons() {
 		return minPersons;
 	}
@@ -133,22 +118,6 @@ public class Activity {
 
 	public void setMaxPersons(int maxPersons) {
 		this.maxPersons = maxPersons;
-	}
-
-	public double getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	public double getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
 	}
 
 	public ActivityCategory getActivityCategory() {

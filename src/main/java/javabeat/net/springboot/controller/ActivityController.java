@@ -59,13 +59,10 @@ public class ActivityController {
 	@RequestMapping(value = "/dbAddActivity", method = RequestMethod.GET)
 	public Activity addActivity(@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "description", required = true) String description,
-			@RequestParam(value = "url", required = true) String url,
 			@RequestParam(value = "price", required = true) int price,
 			@RequestParam(value = "activityCategory", required = true) String activityCategory,
 			@RequestParam(value = "minPersons", required = true) int minPersons,
 			@RequestParam(value = "maxPersons", required = true) int maxPersons,
-			@RequestParam(value = "latitude", required = true) double latitude,
-			@RequestParam(value = "longitude", required = true) double longitude,
 			@RequestParam(value = "active", required = false) boolean active,
 			@RequestParam(value = "social", required = false) boolean social,
 			@RequestParam(value = "relaxed", required = false) boolean relaxed,
@@ -88,7 +85,6 @@ public class ActivityController {
 			@RequestParam(value = "sleet", required = false) boolean sleet,
 			@RequestParam(value = "snowfall", required = false) boolean snowfall) {
 		
-
 		ActivityCategory category = ActivityCategory.valueOf(activityCategory.toUpperCase());
 		Map<ActivityType, Boolean> suitableActivityTypes = putActivitiesInMap(active, social, relaxed, 
 				family, cultural, date);
@@ -96,8 +92,8 @@ public class ActivityController {
 				variableCloudiness, halfClearSky, cloudySky, overcast, fog, rainShowers, thunderstorm,
 				lightSleet, snowShowers, rain, thunder, sleet, snowfall);
 		
-		Activity activity = new Activity(name, description, url, category, price, minPersons, maxPersons, 
-				latitude, longitude, suitableActivityTypes, suitableWeatherTypes);
+		Activity activity = new Activity(name, description, category, price, minPersons, maxPersons, 
+				suitableActivityTypes, suitableWeatherTypes);
 		return activityService.save(activity);
 	}
 	
