@@ -9,6 +9,8 @@ $(document).ready(function() {
 	var lati = 0;
 	var planned;
 
+	$("#loading").hide();
+	
 	console.log("DATE:  " + DATE);
 
 	navigator.geolocation.getCurrentPosition(function(location) {
@@ -54,17 +56,29 @@ $(document).ready(function() {
 			"&nbrOfPersons="+people+
 			"&activityType="+act;
 
+		$('#activityTable').empty();
+			
 		$.ajax({
 	        url: activityURL, 
 	        type: 'GET',
-	        dataType: 'application/json',
-	        success: function(coord) 
+	        //dataType: 'application/json',
+	        success: function(activities) 
 	        {
 	            console.log("SUCCESS");
-	        },
-	        error: function(err)
+				setTimeout(function() {
+					$.fn.fullpage.moveSectionDown();
+				}, 200);
+				showActivities(activities);
+	        }, beforeSend: function () {
+	        	$("#loading").show();
+	    	}, complete: function () {
+	        	$("#loading").hide();
+			},
+	        error: function(xhr, status, err)
 	        {
-	            console.log("ERROR: " + coord);// throw error
+	            console.log("ERROR: " + err);// throw error
+				console.log("response: " + xhr.responseText);
+				console.log("status: " + status);
 	        }
     	});
 	});
@@ -100,7 +114,7 @@ $(document).ready(function() {
     	}, 200);
 	});
 
-	$(".price").click(function(){
+	$(".cost").click(function(){
 		var p = $(this).attr('id').charAt(6);
 		$("#price-0").css({"border-color": "#FFF", 
              "border-weight":"2px"});
@@ -232,6 +246,20 @@ $(document).ready(function() {
 		
     });
 });
+
+function showActivities(activities) {
+	for (var i = 0; i < activities.length; i++) {
+		var activity = activities[i];
+		
+		var row = "<th class=\" col-xs-3\"><img class=\"img-responsive\" src=\"images/" + activity.activityCategory.toLowerCase() + ".png\"></th>" +
+				  "<th>" + activity.activityCategory + "</th>";
+	    var tr = "<tr class=\"col-xs-offset-1\">" + row + "</tr>";
+		
+		//$('th').text(activity.activityCategory);
+		$('#activityTable').append(tr);
+		console.log(activity.activityCategory);
+	}
+}
 
 function getCityCoordinates(city) {
 	var url = "http://localhost:9090";

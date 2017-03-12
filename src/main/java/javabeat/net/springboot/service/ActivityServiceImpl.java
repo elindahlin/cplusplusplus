@@ -35,7 +35,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 	
 	@Override
-	public Collection<Activity> findActivities(double lat, double lon, int rangeKm, ZonedDateTime dateTime,
+	public List<Activity> findActivities(double lat, double lon, int rangeKm, ZonedDateTime dateTime,
 			int pricePerPerson, int nbrOfPersons, ActivityType activityType) {
 		Weather weather = weatherService.getWeatherForSpecifiedTime(lat, lon, dateTime);
 		List<Activity> activities = activityRepository.findAll();
@@ -62,7 +62,7 @@ public class ActivityServiceImpl implements ActivityService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Collection<Activity> getActivityList() {
+	public List<Activity> getActivityList() {
 		LOGGER.info("Getting all activities");
 		return activityRepository.findAll();
 	}

@@ -1,7 +1,7 @@
 package javabeat.net.springboot.service;
 
 import java.time.ZonedDateTime;
-import java.util.Collection;
+import java.util.List;
 
 import javabeat.net.springboot.domain.Activity;
 import javabeat.net.springboot.domain.ActivityType;
@@ -12,9 +12,9 @@ public interface ActivityService {
 	
 //	void removeActivityFromDb(Activity activity);
 	
-	Collection<Activity> getActivityList();
+	List<Activity> getActivityList();
 	
-	Collection<Activity> findActivities(double lat, double lon, int rangeKm, ZonedDateTime dateTime, 
+	List<Activity> findActivities(double lat, double lon, int rangeKm, ZonedDateTime dateTime, 
 			int pricePerPerson, int nbrOfPersons, ActivityType activityType);
 
 }

@@ -5,7 +5,9 @@ import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -48,8 +50,14 @@ public class ActivityController {
 			ActivityType activity = ActivityType.valueOf(activityType.toUpperCase());
 			
 			LOGGER.info("ManagedParsing");
-			return activityService.findActivities(lat, lon, rangeKm, zonedDateTime, pricePerPerson, 
+			List<Activity> activities = activityService.findActivities(lat, lon, rangeKm, zonedDateTime, pricePerPerson, 
 					nbrOfPersons, activity);
+			List<Activity> filteredActivities = activities.stream().filter(act -> 
+						!(act.getActivityCategory().equals(ActivityCategory.JOGGING) ||
+						act.getActivityCategory().equals(ActivityCategory.SLEDGING) ||
+						act.getActivityCategory().equals(ActivityCategory.SKIING))
+					).collect(Collectors.toList());
+			return filteredActivities;
 		} catch (DateTimeParseException | NumberFormatException e) {
 			LOGGER.error("Error parsing: ", e.getMessage());
 		} 
