@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javabeat.net.springboot.domain.City;
 import javabeat.net.springboot.domain.Location;
 import javabeat.net.springboot.service.LocationService;
 
@@ -26,7 +27,7 @@ public class LocationController {
 	}
 	
 	@RequestMapping(value = "/locationName", method = RequestMethod.GET)
-	public String findName(@RequestParam(value = "lat", required = true) double lat,
+	public City findName(@RequestParam(value = "lat", required = true) double lat,
 							 @RequestParam(value = "lon", required = true) double lon) {
 		return locationService.getLocation(lat, lon);
 	}

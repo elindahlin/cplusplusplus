@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestTemplate;
 
 import javabeat.net.springboot.domain.AddressComponent;
+import javabeat.net.springboot.domain.City;
 import javabeat.net.springboot.domain.Location;
 import javabeat.net.springboot.domain.LocationSearchResult;
 import javabeat.net.springboot.domain.Option;
@@ -90,7 +91,7 @@ public class GoogleGatewayImpl implements GoogleGateway {
 	}
 
 	@Override
-	public String getLocationName(double lat, double lon) {
+	public City getLocationName(double lat, double lon) {
 		RestTemplate restTemplate = new RestTemplate();
 		String url = getLocationNameUrl(lat, lon);
 		LOGGER.info("Getting location by string from url: " + url);
@@ -98,12 +99,14 @@ public class GoogleGatewayImpl implements GoogleGateway {
 		return searchResult.getStatus().equals("OK") ? getCityName(searchResult) : null;
 	}
 
-	private String getCityName(LocationSearchResult searchResult) {
+	private City getCityName(LocationSearchResult searchResult) {
 		AddressComponent[] addressComponents = searchResult.getResults()[0].getAddress_components();
 		for (int i = 0; i < addressComponents.length; i++) {
 			AddressComponent component = addressComponents[i];
 			if (Arrays.asList(component.getTypes()).contains("postal_town")) {
-				return component.getShort_name();
+				City city = new City();
+				city.setName(component.getShort_name());
+				return city;
 			}
 		}
 		return null;

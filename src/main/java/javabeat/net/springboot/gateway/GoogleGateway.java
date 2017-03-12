@@ -2,6 +2,7 @@ package javabeat.net.springboot.gateway;
 
 import java.util.Collection;
 
+import javabeat.net.springboot.domain.City;
 import javabeat.net.springboot.domain.Location;
 import javabeat.net.springboot.domain.Option;
 
@@ -13,5 +14,5 @@ public interface GoogleGateway {
 	
 	Location getLocation(String locationString);
 	
-	String getLocationName(double lat, double lon);
+	City getLocationName(double lat, double lon);
 }

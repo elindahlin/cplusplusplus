@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import javabeat.net.springboot.domain.City;
 import javabeat.net.springboot.domain.Location;
 import javabeat.net.springboot.gateway.GoogleGateway;
 
@@ -28,7 +29,7 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public String getLocation(double lat, double lon) {
+	public City getLocation(double lat, double lon) {
 		return googleGateway.getLocationName(lat, lon);
 	}
 }

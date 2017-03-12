@@ -1,10 +1,11 @@
 package javabeat.net.springboot.service;
 
+import javabeat.net.springboot.domain.City;
 import javabeat.net.springboot.domain.Location;
 
 public interface LocationService {
 
 	Location getLocation(String locationString);
 	
-	String getLocation(double lat, double lon);
+	City getLocation(double lat, double lon);
 }
