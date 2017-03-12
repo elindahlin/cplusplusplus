@@ -262,7 +262,7 @@ function showActivities(activities) {
 }
 
 function getCityCoordinates(city) {
-	var url = "http://localhost:9090";
+	var url = "https://localhost:9090";
 
 	var cityURL = url + "/location?place="+city;
 	$.ajax({

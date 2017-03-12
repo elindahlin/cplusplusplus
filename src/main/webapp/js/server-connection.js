@@ -1,5 +1,5 @@
 var DATE;
-var url = "http://localhost:9090";
+var url = "https://localhost:9090";
 var lon = 0;
 var lat = 0;
 
