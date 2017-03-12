@@ -1,5 +1,6 @@
 var DATE;
-var url = "https://localhost:9090";
+//var url = "http://localhost:9090";
+var url = "https://mayfly-c-plus-plus-plus.herokuapp.com";
 var lon = 0;
 var lat = 0;
 
