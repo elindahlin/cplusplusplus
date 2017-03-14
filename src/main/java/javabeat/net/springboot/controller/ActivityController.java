@@ -43,15 +43,19 @@ public class ActivityController {
     		@RequestParam(value = "dateTime", required = true) String dateTime,
     		@RequestParam(value = "pricePerPerson", required = true) int pricePerPerson,
     		@RequestParam(value = "nbrOfPersons", required = true) int nbrOfPersons,
-    		@RequestParam(value = "activityType", required = true) String activityType) {
+    		@RequestParam(value = "activityType", required = true) String actType) {
 		
 		try {			
 			ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime);
-			ActivityType activity = ActivityType.valueOf(activityType.toUpperCase());
+			ActivityType activityType = ActivityType.valueOf(actType.toUpperCase());
 			
-			LOGGER.info("ManagedParsing");
-			List<Activity> activities = activityService.findActivities(lat, lon, rangeKm, zonedDateTime, pricePerPerson, 
-					nbrOfPersons, activity);
+			LOGGER.info("Searching activities matching: lat=" + lat + ",lon=" + lon + ",range=" + rangeKm + 
+					",dateTime=" + zonedDateTime + ",price=" + pricePerPerson + ",nbr=" + nbrOfPersons +
+					",type=" + activityType);
+			List<Activity> activities = activityService.findActivities(lat, lon, rangeKm, zonedDateTime, 
+					pricePerPerson, nbrOfPersons, activityType);
+			LOGGER.info("Suggesting activities: " + activities.stream()
+				.map(activity -> activity.getActivityCategory()).collect(Collectors.toList()));
 			List<Activity> filteredActivities = activities.stream().filter(act -> 
 						!(act.getActivityCategory().equals(ActivityCategory.JOGGING) ||
 						act.getActivityCategory().equals(ActivityCategory.SLEDGING) ||

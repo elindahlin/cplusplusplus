@@ -1,7 +1,6 @@
 package javabeat.net.springboot.service;
 
 import java.time.ZonedDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +43,7 @@ public class ActivityServiceImpl implements ActivityService {
 			.filter(activity -> 
 					activity.isSuitableFor(activityType) && 
 					activity.isSuitableFor(weather.getWeatherType()) &&
-					activity.getPrice() <= pricePerPerson &&
+					pricePerPerson > 0 ? activity.getPrice() <= pricePerPerson : true &&
 					activity.getMaxPersons() >= nbrOfPersons && 
 					activity.getMinPersons() <= nbrOfPersons &&
 					activity.isCloseTo(lat, lon, rangeKm))

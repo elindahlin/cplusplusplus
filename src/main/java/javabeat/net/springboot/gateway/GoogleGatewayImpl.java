@@ -23,27 +23,33 @@ import javabeat.net.springboot.domain.PlaceSearchResult;
 public class GoogleGatewayImpl implements GoogleGateway {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GoogleGatewayImpl.class);
+	private final RestTemplate restTemplate;
 	
 	private final String API_KEY = "AIzaSyDvzJrzaCTEM58N3DaFc6bqnWrKnBZcgIc";
 	private final String URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
 	private final String LOCATION_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 
+	public GoogleGatewayImpl() {
+		this.restTemplate = new RestTemplate();
+	}
+	
 	@Override
 	public Collection<Option> findOptionsByType(String type, double lat, double lon, double radius) {
-		RestTemplate restTemplate = new RestTemplate();
 		String url = getTypeUrl(type, lat, lon, radius);
-		LOGGER.info("Getting options by type from url: " + url);
-		PlaceSearchResult searchResult = restTemplate.getForObject(url, PlaceSearchResult.class);		
+		PlaceSearchResult searchResult = getPlaceInfo(url);		
 		return searchResult.getStatus().equals("OK") ? convertToOptionList(searchResult) : Collections.emptyList();
 	}
 	
 	@Override
 	public Collection<Option> findOptionsByText(String text, double lat, double lon, double radius) {
-		RestTemplate restTemplate = new RestTemplate();
 		String url = getTextUrl(text, lat, lon, radius);
-		LOGGER.info("Getting options by text from url: " + url);
-		PlaceSearchResult searchResult = restTemplate.getForObject(url, PlaceSearchResult.class);		
+		PlaceSearchResult searchResult = getPlaceInfo(url);		
 		return searchResult.getStatus().equals("OK") ? convertToOptionList(searchResult) : Collections.emptyList();
+	}
+
+	private PlaceSearchResult getPlaceInfo(String url) {
+		LOGGER.info("Getting options by type from url: " + url);
+		return restTemplate.getForObject(url, PlaceSearchResult.class);
 	}
 	
 	private Collection<Option> convertToOptionList(PlaceSearchResult searchResult) {

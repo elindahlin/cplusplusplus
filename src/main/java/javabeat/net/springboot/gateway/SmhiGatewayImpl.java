@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestTemplate;
+//import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import javabeat.net.springboot.domain.Forecast;
 
@@ -15,16 +16,25 @@ import javabeat.net.springboot.domain.Forecast;
 public class SmhiGatewayImpl implements SmhiGateway {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SmhiGatewayImpl.class);
+	private final RestTemplate restTemplate;
+	
+	public SmhiGatewayImpl() { //RestTemplateBuilder restTemplateBuilder) {
+        //this.restTemplate = restTemplateBuilder.build();
+		this.restTemplate = new RestTemplate();
+    }
 	
 	@Override
 	public Forecast getForecast(double lat, double lon) {
 		String latitude = String.format(Locale.US, "%.4f", lat);
 		String longitude = String.format(Locale.US, "%.4f", lon);
-		RestTemplate restTemplate = new RestTemplate();
-		String url = getUrl(latitude, longitude);
-		LOGGER.info("Getting forecast from url: " + url);
-		Forecast forecast = restTemplate.getForObject(url, Forecast.class);		
+		Forecast forecast = getForecast(latitude, longitude);		
 		return forecast;
+	}
+
+	private Forecast getForecast(String lat, String lon) {
+		String url = getUrl(lat, lon);
+		LOGGER.info("Getting forecast from url: " + url);
+		return restTemplate.getForObject(url, Forecast.class);
 	}
 
 	

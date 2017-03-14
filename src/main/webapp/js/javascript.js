@@ -10,8 +10,6 @@ $(document).ready(function() {
 	var planned;
 
 	$("#loading").hide();
-	
-	console.log("DATE:  " + DATE);
 
 	navigator.geolocation.getCurrentPosition(function(location) {
   		lati = location.coords.latitude;
@@ -20,9 +18,6 @@ $(document).ready(function() {
 
 	var cw = $('.circle').width();
 	$('.circle').css({'height':cw+'px'});
-
-	var price = $('.price').width();
-	$('.price').css({'height':price+'px'});
 
 	$("#editLocation").hide();
 	$("#content1").hide();
@@ -103,6 +98,10 @@ $(document).ready(function() {
 	  		console.log("Enter");
 			console.log("CITY:" + $('#customLocation').val());
 		}
+	});
+
+	$(".more-info").click(function(){
+		console.log("Show more info about..." + $(this).attr('id'));
 	});
 
 	$('#btnGetCityCoords').click(function(){
@@ -251,8 +250,8 @@ function showActivities(activities) {
 	for (var i = 0; i < activities.length; i++) {
 		var activity = activities[i];
 		
-		var row = "<th class=\" col-xs-3\"><img class=\"img-responsive\" src=\"images/" + activity.activityCategory.toLowerCase() + ".png\"></th>" +
-				  "<th>" + activity.activityCategory + "</th>";
+		var row = "<th class=\" col-xs-2\"><img class=\"img-responsive\" src=\"images/" + activity.activityCategory.toLowerCase() + ".png\"></th>" +
+				  "<th>" + activity.activityCategory + "</th>" + "<th id=\"activityCategory\" class=\"more-info\"><img src=\"images/arrow-right.png\"></th>";
 	    var tr = "<tr class=\"col-xs-offset-1\">" + row + "</tr>";
 		
 		//$('th').text(activity.activityCategory);
@@ -262,8 +261,8 @@ function showActivities(activities) {
 }
 
 function getCityCoordinates(city) {
-	//var url = "http://localhost:9090";
-	var url = "https://mayfly-c-plus-plus-plus.herokuapp.com";
+	var url = "http://localhost:9090";
+	//var url = "https://mayfly-c-plus-plus-plus.herokuapp.com";
 
 	var cityURL = url + "/location?place="+city;
 	$.ajax({

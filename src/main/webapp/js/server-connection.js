@@ -1,6 +1,6 @@
 var DATE;
-//var url = "http://localhost:9090";
-var url = "https://mayfly-c-plus-plus-plus.herokuapp.com";
+var url = "http://localhost:9090";
+//var url = "https://mayfly-c-plus-plus-plus.herokuapp.com";
 var lon = 0;
 var lat = 0;
 
@@ -73,7 +73,7 @@ function getCurrentWeather() {
 function setWeatherGif(weather){
     if(weather === 'CLEAR_SKY' || weather === 'NEARLY_CLEAR_SKY') {
         // solig gif
-        $("body").css("background-image", "url('http://i.giphy.com/128ydcHOsrk5GM.gif')");
+        $("body").css("background-image", "url('http://i.giphy.com/CPghlEnbaVa2A.gif')");
     } else if(weather === 'VARIABLE_CLOUDINESS' || weather === 'HALFCREAR_SKY'
         || weather === 'CLOUDY_SKY' || weather === 'OVERCAST' || weather === 'FOG') {
         //  molnig gif
