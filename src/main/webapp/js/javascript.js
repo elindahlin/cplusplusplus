@@ -261,8 +261,8 @@ function showActivities(activities) {
 }
 
 function getCityCoordinates(city) {
-	var url = "http://localhost:9090";
-	//var url = "https://mayfly-c-plus-plus-plus.herokuapp.com";
+	//var url = "http://localhost:9090";
+	var url = "https://mayfly-c-plus-plus-plus.herokuapp.com";
 
 	var cityURL = url + "/location?place="+city;
 	$.ajax({
