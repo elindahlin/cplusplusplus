@@ -34,22 +34,10 @@ $(function() {
 		console.log("Selected date: " + userPreferences.planned);
 	});
 
-	$('#customLocation').bind("enterKey",function(e){
-		console.log("Enter");
-		console.log("CITY bind:" + $('#customLocation').val());
-	});
-	$('#customLocation').keyup(function(e){
-		if(e.keyCode == 13) {
-	  		$(this).trigger("enterKey");
-	  		console.log("Enter");
-			console.log("CITY keyup:" + $('#customLocation').val());
-		}
-	});
-
 	$("#currentPositionFrame").click(function(){
 		currentPositionClicked();
 		// use current position for userPreferences => no update (reset?)
-		console.log("Selected position: " + userPreferences.lat + ", " +
+		console.log("Selected current position: " + userPreferences.lat + ", " +
   						userPreferences.lon);
 		moveToNextSectionWithDelay(200);
 	});
@@ -61,8 +49,17 @@ $(function() {
 	$('#btnGetCityCoords').click(function(){
 		getCityCoordinates($('#customLocation').val(), userPreferences);
 		moveToNextSectionWithDelay(200);
-		console.log("Selected position: " + userPreferences.lat + ", " +
+		console.log("Selected other position: " + userPreferences.lat + ", " +
   						userPreferences.lon);
+	});
+
+	$('#customLocation').keyup(function(e){
+		if(e.keyCode == 13) {
+			getCityCoordinates($('#customLocation').val(), userPreferences);
+			moveToNextSectionWithDelay(200);
+			console.log("Selected other position: " + userPreferences.lat + ", " +
+  						userPreferences.lon);
+		}
 	});
 
 	$(".activity").click(function() {
