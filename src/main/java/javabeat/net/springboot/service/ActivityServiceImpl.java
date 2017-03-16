@@ -43,7 +43,7 @@ public class ActivityServiceImpl implements ActivityService {
 			.filter(activity -> 
 					activity.isSuitableFor(activityType) && 
 					activity.isSuitableFor(weather.getWeatherType()) &&
-					pricePerPerson > 0 ? activity.getPrice() <= pricePerPerson : true &&
+					pricePerPerson >= 0 ? activity.getPrice() <= pricePerPerson : true &&
 					activity.getMaxPersons() >= nbrOfPersons && 
 					activity.getMinPersons() <= nbrOfPersons &&
 					activity.isCloseTo(lat, lon, rangeKm))

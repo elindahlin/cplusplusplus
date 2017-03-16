@@ -1,283 +1,175 @@
 ﻿
-$(document).ready(function() {
+$(function() {
 	$('#fullpage').fullpage();
-	var distance = 0;
-	var pris = 0;
-	var act = '';
-	var people = 0;
-	var long = 0;
-	var lati = 0;
-	var planned;
+	var userPreferences = { distance : 0, 
+							price : 0,
+							activity : "",
+							people : 0,
+							lat : 0,
+							lon : 0,
+							planned : "",
+							today : "",
+							activities : "" };
 
-	$("#loading").hide();
+	hideLoading();
 
-	navigator.geolocation.getCurrentPosition(function(location) {
-  		lati = location.coords.latitude;
-  		long = location.coords.longitude;
-	});
+ 	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(location) {
+ 	 		userPreferences.lat = location.coords.latitude;
+ 	 		userPreferences.lon = location.coords.longitude;
+  			var init = setInitials(userPreferences.lat, userPreferences.lon, 
+  						userPreferences);
+  			console.log("Current position: " + userPreferences.lat + ", " +
+  						userPreferences.lon);
+		});
+	} else {
+		console.log("Geolocation is not supported by this browser.");
+	}
 
-	var cw = $('.circle').width();
-	$('.circle').css({'height':cw+'px'});
+	initView();
 
-	$("#editLocation").hide();
-	$("#content1").hide();
-
-	var cw = $('.circle').width();
-	$('.circle').css({'height':cw+'px'});
-
-	$(".activity").click(function(){
-		$(".activity").css({"border-color": "transparent"});
-		$(this).css({"border-color": "#ff1d8e", 
-             "border-weight":"2px"});
-   		setTimeout(function() {
-        	$.fn.fullpage.moveSectionDown();
-    	}, 200);
-
-   		act = $(this).find(".activityType").text();
-
-	});
-
-	$("#search").click(function(){
-		console.log("Distance: " + distance + " Pris: " + pris + " Aktivitet: " + act
-			+ " Antal: " + people + " Longitud: " + long + " Latitud: "+ lati
-			+ "Datum: " + planned);
-		
-		var activityURL = url + "/activity?"+
-			"lat="+lati+
-			"&lon="+long+
-			"&rangeKm="+distance+
-			"&dateTime="+planned+
-			"&pricePerPerson="+pris+
-			"&nbrOfPersons="+people+
-			"&activityType="+act;
-
-		$('#activityTable').empty();
-			
-		$.ajax({
-	        url: activityURL, 
-	        type: 'GET',
-	        //dataType: 'application/json',
-	        success: function(activities) 
-	        {
-	            console.log("SUCCESS");
-				setTimeout(function() {
-					$.fn.fullpage.moveSectionDown();
-				}, 200);
-				showActivities(activities);
-	        }, beforeSend: function () {
-	        	$("#loading").show();
-	    	}, complete: function () {
-	        	$("#loading").hide();
-			},
-	        error: function(xhr, status, err)
-	        {
-	            console.log("ERROR: " + err);// throw error
-				console.log("response: " + xhr.responseText);
-				console.log("status: " + status);
-	        }
-    	});
-	});
-
-	$(".date").click(function(){
-		console.log("THIS: " + $(this).attr('id'));
-		var clicked = parseInt($(this).attr('id').charAt(3));
-		planned = new Date();
-		planned.setDate(DATE.getDate()+clicked);
-		planned = planned.toISOString();
-		console.log("PLANNED DATE: " + planned);
-		$.fn.fullpage.moveSectionDown();
+	$(".date").click(function() {
+		userPreferences.planned = selectDate(this, userPreferences);
+		moveToNextSectionWithDelay(200);
+		console.log("Selected date: " + userPreferences.planned);
 	});
 
 	$('#customLocation').bind("enterKey",function(e){
 		console.log("Enter");
-		console.log("CITY:" + $('#customLocation').val());
+		console.log("CITY bind:" + $('#customLocation').val());
 	});
 	$('#customLocation').keyup(function(e){
 		if(e.keyCode == 13) {
 	  		$(this).trigger("enterKey");
 	  		console.log("Enter");
-			console.log("CITY:" + $('#customLocation').val());
+			console.log("CITY keyup:" + $('#customLocation').val());
 		}
+	});
+
+	$("#currentPositionFrame").click(function(){
+		currentPositionClicked();
+		// use current position for userPreferences => no update (reset?)
+		console.log("Selected position: " + userPreferences.lat + ", " +
+  						userPreferences.lon);
+		moveToNextSectionWithDelay(200);
+	});
+    	
+	$(".btnEditPosition").click(function(){
+		editLocationClicked();
+	});
+
+	$('#btnGetCityCoords').click(function(){
+		getCityCoordinates($('#customLocation').val(), userPreferences);
+		moveToNextSectionWithDelay(200);
+		console.log("Selected position: " + userPreferences.lat + ", " +
+  						userPreferences.lon);
+	});
+
+	$(".activity").click(function() {
+		userPreferences.activity = selectActivity(this);
+		moveToNextSectionWithDelay(200);
+		console.log("Selected activity: " + userPreferences.activity);
+	});
+
+	$(".cost").click(function(){
+		userPreferences.price = selectPriceRange(this);
+		console.log("Selected max price: " + userPreferences.price);
+		moveToNextSectionWithDelay(200);
+	});
+
+	$(".amount").click(function(event) {
+		userPreferences.people = selectNbrOfPersons(this);
+		console.log("Selected group size: " + userPreferences.people);
+		moveToNextSectionWithDelay(200);
+    });
+
+	$(".distance").click(function(){
+		userPreferences.distance = selectDistance(this);
+		console.log("Selected max distance: " + userPreferences.distance);
+	});
+
+	$("#search").click(function() {
+		searchForActivities(userPreferences);
 	});
 
 	$(".more-info").click(function(){
 		console.log("Show more info about..." + $(this).attr('id'));
 	});
-
-	$('#btnGetCityCoords').click(function(){
-		var c = getCityCoordinates($('#customLocation').val());
-		//long = c.lng;
-		//lati = c.lat;
-		setTimeout(function() {
-        	$.fn.fullpage.moveSectionDown();
-    	}, 200);
-	});
-
-	$(".cost").click(function(){
-		var p = $(this).attr('id').charAt(6);
-		$("#price-0").css({"border-color": "#FFF", 
-             "border-weight":"2px"});
-		$("#price-1").css({"border-color": "#FFF", 
-             "border-weight":"2px"});
-		$("#price-2").css({"border-color": "#FFF", 
-             "border-weight":"2px"});
-		$("#price-3").css({"border-color": "#FFF", 
-             "border-weight":"2px"});
-		$(this).css({"border-color": "#ff1d8e", 
-             "border-weight":"6px", 
-             "border-style":"solid"});
-
-		if (p == 0) {
-			pris = 0;
-		} else if(p == 1) {
-			pris = 100;
-		} else if(p == 2) {
-			pris = 500;
-		} else if (p == 3) {
-			pris = -1;
-		}
-		setTimeout(function() {
-        	$.fn.fullpage.moveSectionDown();
-    	}, 200);
-	});
-
-	$(".btnEditPosition").click(function(){
-		console.log("EDIT LOCATION");
-		$("#editLocation").removeClass('slideUp').addClass("slideDown").show();
-		$("#editPositionFrame").css({"border-color": "#ff1d8e", 
-             "border-weight":"2px"});
-		$("#currentPositionFrame").css({"border-color": "#fff", 
-             "border-weight":"2px"});
-	});
-
-	$("#currentPositionFrame").click(function(){
-		$("#editLocation").removeClass('slideDown').addClass("slideUp").fadeOut();
-		$("#editPositionFrame").css({"border-color": "#fff", 
-             "border-weight":"2px"});
-		$("#currentPositionFrame").css({"border-color": "#ff1d8e", 
-             "border-weight":"2px"});
-		setTimeout(function() {
-        	$.fn.fullpage.moveSectionDown();
-    	}, 200);
-    	//getActivityCoordinates();
-	});
-
-	$(".distance").click(function(){
-		var dis = $(this).attr('id').charAt(9);
-		$("#distance-0").css({"border-color": "#FFF", 
-             "border-weight":"2px"});
-		$("#distance-1").css({"border-color": "#FFF", 
-             "border-weight":"2px"});
-		$("#distance-2").css({"border-color": "#FFF", 
-             "border-weight":"2px"});
-		$("#distance-3").css({"border-color": "#FFF", 
-             "border-weight":"2px"});
-		$(this).css({"border-color": "#ff1d8e", 
-             "border-weight":"6px", 
-             "border-style":"solid"});
-
-		if(dis == 0) {
-			distance = 5000;
-		} else if (dis == 1) {
-			distance = 10000;
-		} else if(dis == 2) {
-			distance = 20000;
-		} else if(dis = 3){
-			distance = 50000;
-		}
-	});
-
-	$(".amount").click(function(event) {
-		var clicked = $(this).attr('id');
-
-		if(clicked == "first-man"){
-			people = 1;
-			$(this).attr('src',"images/man-pink.png");
-			$("#second-man").attr('src', "images/man.png");
-			$("#third-man").attr('src', "images/man.png");
-			$("#fourth-man").attr('src', "images/man.png");
-			$("#fifth-man").attr('src', "images/man.png");
-			$("#more-men").attr('src', "images/add.png");
-		} else if(clicked == "second-man") {
-			people = 2;
-			$(this).attr('src',"images/man-pink.png");
-			$("#first-man").attr('src', "images/man-pink.png");
-			$("#third-man").attr('src', "images/man.png");
-			$("#fourth-man").attr('src', "images/man.png");
-			$("#fifth-man").attr('src', "images/man.png");
-			$("#more-men").attr('src', "images/add.png");
-		} else if(clicked == "third-man") {
-			people = 3;
-			$("#first-man").attr('src',"images/man-pink.png");
-			$("#second-man").attr('src', "images/man-pink.png");
-			$("#third-man").attr('src', "images/man-pink.png");
-			$("#fourth-man").attr('src', "images/man.png");
-			$("#fifth-man").attr('src', "images/man.png");
-			$("#more-men").attr('src', "images/add.png");
-		}  else if(clicked == "fourth-man") {
-			people = 4;
-			$("#first-man").attr('src',"images/man-pink.png");
-			$("#second-man").attr('src', "images/man-pink.png");
-			$("#third-man").attr('src', "images/man-pink.png");
-			$("#fourth-man").attr('src', "images/man-pink.png");
-			$("#fifth-man").attr('src', "images/man.png");
-			$("#more-men").attr('src', "images/add.png");
-		} else if(clicked == "fifth-man") {
-			people = 5;
-			$("#first-man").attr('src',"images/man-pink.png");
-			$("#second-man").attr('src', "images/man-pink.png");
-			$("#third-man").attr('src', "images/man-pink.png");
-			$("#fourth-man").attr('src', "images/man-pink.png");
-			$("#fifth-man").attr('src', "images/man-pink.png");
-			$("#more-men").attr('src', "images/add.png");
-		} else if(clicked == "more-men") {
-			people = 6;
-			$("#first-man").attr('src',"images/man-pink.png");
-			$("#second-man").attr('src', "images/man-pink.png");
-			$("#third-man").attr('src', "images/man-pink.png");
-			$("#fourth-man").attr('src', "images/man-pink.png");
-			$("#fifth-man").attr('src', "images/man-pink.png");
-			$("#more-men").attr('src', "images/add-pink.png");
-		}
-		setTimeout(function() {
-        	$.fn.fullpage.moveSectionDown();
-    	}, 200);
-		
-    });
 });
 
-function showActivities(activities) {
-	for (var i = 0; i < activities.length; i++) {
-		var activity = activities[i];
-		
-		var row = "<th class=\" col-xs-2\"><img class=\"img-responsive\" src=\"images/" + activity.activityCategory.toLowerCase() + ".png\"></th>" +
-				  "<th>" + activity.activityCategory + "</th>" + "<th id=\"activityCategory\" class=\"more-info\"><img src=\"images/arrow-right.png\"></th>";
-	    var tr = "<tr class=\"col-xs-offset-1\">" + row + "</tr>";
-		
-		//$('th').text(activity.activityCategory);
-		$('#activityTable').append(tr);
-		console.log(activity.activityCategory);
-	}
+function setInitials(lat, lon, userPreferences) {
+	getCity(lat, lon);
+	getCurrentWeather(lat, lon, userPreferences);
 }
 
-function getCityCoordinates(city) {
-	//var url = "http://localhost:9090";
-	var url = "https://mayfly-c-plus-plus-plus.herokuapp.com";
+function selectDate(buttonClicked, userPreferences) {
+		var clickedId = parseInt($(buttonClicked).attr('id').charAt(3));
+		var dateToday = new Date(userPreferences.today);
+		var planned = new Date();
+		planned.setDate(dateToday.getDate()+clickedId);
+		return planned.toISOString();
+}
 
-	var cityURL = url + "/location?place="+city;
-	$.ajax({
-        url: cityURL, 
-        type: 'GET',
-        dataType: 'application/json',
-        success: function(coord) 
-        {
-            return coord;
-        },
-        error: function(err)
-        {
-            console.log("ERROR: " + coord);// throw error
-        }
-    });
+function selectActivity(buttonClicked) {
+	return activityClicked(buttonClicked);
+}
+
+function selectPriceRange(buttonClicked) {
+	var buttonId = priceClicked(buttonClicked);
+	var price;
+	if (buttonId == 0) {
+		price = 0;
+	} else if (buttonId == 1) {
+		price = 100;
+	} else if (buttonId == 2) {
+		price = 500;
+	} else if (buttonId == 3) {
+		price = -1;
+	}	
+    return price;
+}
+
+function selectNbrOfPersons(buttonClicked) {
+	return peopleClicked(buttonClicked);
+}
+
+function selectDistance(buttonClicked) {
+	var buttonId = distanceClicked(buttonClicked);
+	var distance;
+	if (buttonId == 0) {
+		distance = 5000;
+	} else if (buttonId == 1) {
+		distance = 10000;
+	} else if (buttonId == 2) {
+		distance = 20000;
+	} else if (buttonId = 3) {
+		distance = 50000;
+	}
+
+	return distance;
+}
+
+function searchForActivities(userPreferences) {
+	clearActivityTable();
+	
+	console.log("SEARCHING FOR MATCHES  ->  Distance: " + userPreferences.distance + 
+			", Price: " + userPreferences.price + 
+			", Activity: " + userPreferences.activity + 
+			", Number: " + userPreferences.people + 
+			", Longitude: " + userPreferences.lon + 
+			", Latitude: " + userPreferences.lat + 
+			", Date: " + userPreferences.planned);
+		
+	var activityUrl = "/activity?" +
+			"lat=" + userPreferences.lat +
+			"&lon=" + userPreferences.lon +
+			"&rangeKm=" + userPreferences.distance +
+			"&dateTime=" + userPreferences.planned +
+			"&pricePerPerson=" + userPreferences.price +
+			"&nbrOfPersons=" + userPreferences.people +
+			"&activityType=" + userPreferences.activity;
+		
+	getActivities(activityUrl, userPreferences);
 }
 
 function myFunction() {
