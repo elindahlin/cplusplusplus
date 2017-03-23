@@ -1,7 +1,6 @@
 package javabeat.net.springboot.service;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +47,7 @@ public class WeatherServiceImpl implements WeatherService {
 		PrecipitationType precipitationType = getPrecipitationType(forecastEvent);
 		
 		Weather weather = new Weather();
-		weather.setDate(LocalDate.now().toString());
+		weather.setDate(dateTime.toLocalDate().toString());
 		weather.setTemperature(temperature);
 		weather.setWeatherType(weatherType);
 		weather.setPrecipitationType(precipitationType);

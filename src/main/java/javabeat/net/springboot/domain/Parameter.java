@@ -13,6 +13,11 @@ public class Parameter {
 	
 	public Parameter() {
 	}
+	
+	public Parameter(String name, Number value) {
+		this.name = name;
+		this.values = new Number[]{ value };
+	}
 
 	public String getName() {
 		return name;
